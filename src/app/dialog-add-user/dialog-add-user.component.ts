@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatDialogRef } from '@angular/material/dialog';
 import { User } from 'src/models/user.class';
 
 
@@ -10,6 +12,11 @@ import { User } from 'src/models/user.class';
 export class DialogAddUserComponent {
   user = new User();
   birthDate!:  Date;
+  loading = false;
+
+  constructor(
+    private firestore: AngularFirestore,
+    public dialogRef: MatDialogRef<DialogAddUserComponent>) { }
 
   onNoClick() {
 
@@ -19,7 +26,15 @@ export class DialogAddUserComponent {
   saveUser() {
     this.user.birthDate = this.birthDate.getTime();
     console.log('Der aktuelle User ist:', this.user);
-    
+    this.loading = true;
+    this.firestore
+    .collection('users')
+    .add(this.user.toJson())
+    .then((result: any) => {
+      this.loading = false;
+      console.log('User added', result);
+      this.dialogRef.close();
+    });
   }
 
 }
