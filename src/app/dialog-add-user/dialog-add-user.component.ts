@@ -18,8 +18,8 @@ export class DialogAddUserComponent {
     private firestore: AngularFirestore,
     public dialogRef: MatDialogRef<DialogAddUserComponent>) { }
 
-  onNoClick() {
-
+    close() {
+    this.dialogRef.close();
   }
 
 
